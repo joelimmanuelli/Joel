@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Joel — Designer</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
+    padding-top: 80px;
+  }
+  .hero-left {
+    display: flex; flex-direction: column;
+    justify-content: center;
+    padding: 5rem 3rem 5rem 5rem;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 6vw, 5.5rem);
+    line-height: 1.05;
+    font-weight: 400;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .hero-desc {
+    margin-top: 2rem;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--muted);
+    max-width: 420px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+  .hero-cta {
+    margin-top: 3rem;
+    display: flex; gap: 1.5rem; align-items: center;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+  .hero-right {
+    position: relative;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .hero-image-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, #1a1510 0%, #0f0f0f 50%, #12100e 100%);
+  }
+  .hero-image-shape {
+    position: absolute;
+    width: 70%;
+    padding-top: 85%;
+    background: #1d1a15;
+    clip-path: polygon(10% 0%, 90% 5%, 100% 90%, 0% 100%);
+    opacity: 0;
+    animation: fadeIn 1s 0.5s forwards;
+  }
+  .hero-initials {
+    position: relative;
+    font-family: 'Playfair Display', serif;
+    font-size: 12rem;
+    font-weight: 700;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(200,169,110,0.15);
+    letter-spacing: -0.05em;
+    user-select: none;
+    opacity: 0;
+    animation: fadeIn 1s 0.7s forwards;
+  }
+  .work-section {
+    padding: 8rem 5rem;
+    min-height: auto;
+  }
+  .project-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+  .project-card {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    background: var(--card-bg);
+    cursor: none;
+    text-decoration: none;
+    color: inherit;
+  }
+  .project-card:nth-child(1) { grid-column: span 2; aspect-ratio: 16/7; --stagger: 0s; }
+  .project-card:nth-child(2) { --stagger: 0.08s; }
+  .project-card:nth-child(3) { --stagger: 0.16s; }
+  .project-card:nth-child(4) { --stagger: 0.24s; }
+  .project-bg {
+    position: absolute; inset: 0;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .project-card:hover .project-bg { transform: scale(1.04); }
+  .project-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%);
+    transition: opacity 0.4s;
+  }
+  .project-content {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 2.5rem;
+    transform: translateY(0);
+    transition: transform 0.4s ease;
+  }
+  .project-category {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  .project-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 400;
+    line-height: 1.2;
+  }
+  .project-hover-info {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: rgba(240,236,227,0.5);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.4s 0.1s;
+  }
+  .project-card:hover .project-hover-info { opacity: 1; transform: translateY(0); }
+  .project-arrow {
+    position: absolute; top: 2rem; right: 2rem;
+    width: 44px; height: 44px;
+    border: 1px solid rgba(200,169,110,0.3);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0;
+    transform: translate(10px, -10px);
+    transition: all 0.3s;
+    font-size: 1.1rem;
+  }
+  .project-card:hover .project-arrow { opacity: 1; transform: translate(0, 0); }
+
+  .skills-section {
+    padding: 8rem 5rem;
+    background: #0d0d0d;
+    min-height: auto;
+    overflow: hidden;
+    position: relative;
+  }
+  .skills-marquee-wrapper {
+    margin-top: 4rem;
+    overflow: hidden;
+    position: relative;
+  }
+  .skills-marquee-wrapper::before,
+  .skills-marquee-wrapper::after {
+    content: '';
+    position: absolute; top: 0; bottom: 0;
+    width: 120px; z-index: 2;
+    pointer-events: none;
+  }
+  .skills-marquee-wrapper::before { left: 0; background: linear-gradient(to right, #0d0d0d, transparent); }
+  .skills-marquee-wrapper::after { right: 0; background: linear-gradient(to left, #0d0d0d, transparent); }
+  .skills-track {
+    display: flex; gap: 0;
+    animation: marquee 20s linear infinite;
+    width: max-content;
+  }
+  .skills-track:nth-child(2) { animation-direction: reverse; margin-top: 1px; }
+  .skills-marquee-wrapper:hover .skills-track,
+  .skills-marquee-wrapper:focus-within .skills-track { animation-play-state: paused; }
+  .skill-pill {
+    padding: 1rem 2.5rem;
+    border: 1px solid var(--border);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+    transition: all 0.3s;
+    cursor: none;
+    flex-shrink: 0;
+  }
+  .skill-pill:hover { color: var(--accent); border-color: rgba(200,169,110,0.3); }
+  .skill-pill.accent { color: var(--accent); border-color: rgba(200,169,110,0.2); }
+
+  .about-section {
+    padding: 8rem 5rem;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 8rem;
+    align-items: center;
+    min-height: auto;
+  }
+  .about-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 3.5vw, 3rem);
+    font-weight: 400;
+    line-height: 1.2;
+  }
+  .about-desc {
+    margin-top: 2rem;
+    font-size: 1rem;
+    line-height: 1.9;
+    color: var(--muted);
+    max-width: 58ch;
+  }
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-top: 3rem;
+  }
+  .about-image-col { position: relative; }
+  .about-image-frame {
+    aspect-ratio: 3/4;
+    background: #1a1714;
+    position: relative;
+    overflow: hidden;
+  }
+  .about-image-frame::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      rgba(200,169,110,0.02) 40px,
+      rgba(200,169,110,0.02) 41px
+    );
+  }
+  .about-image-label {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    font-style: italic;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(200,169,110,0.2);
+  }
+  .about-frame-tag {
+    position: absolute; bottom: 2rem; right: -1rem;
+    background: var(--accent);
+    color: var(--bg);
+    padding: 0.75rem 1.5rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .contact-section {
+    padding: 8rem 5rem;
+    background: #060606;
+    min-height: auto;
+    position: relative;
+    overflow: hidden;
+  }
+  .contact-bg-text {
+    position: absolute;
+    bottom: -2rem; right: -1rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 18vw;
+    font-weight: 700;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(200,169,110,0.04);
+    pointer-events: none;
+    line-height: 1;
+    user-select: none;
+  }
+  .contact-inner { position: relative; max-width: 700px; }
+  .contact-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 5vw, 4.5rem);
+    font-weight: 400;
+    line-height: 1.1;
+  }
+  .contact-title em { font-style: italic; color: var(--accent); }
+  .contact-sub {
+    margin-top: 1.5rem;
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+  .contact-form {
+    margin-top: 3rem;
+    display: flex; flex-direction: column; gap: 1.5rem;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+  .form-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .form-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    padding: 0.8rem 0;
+    color: var(--fg);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.3s;
+    cursor: none;
+  }
+  .form-input::placeholder { color: var(--muted); }
+  .form-input:focus { border-color: var(--accent); }
+  .form-textarea {
+    resize: none;
+    height: 100px;
+  }
+  .form-submit {
+    align-self: flex-start;
+    margin-top: 1rem;
+    padding: 1rem 3rem;
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: none;
+    transition: all 0.3s;
+  }
+  .form-submit:hover { background: var(--accent); color: var(--bg); }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  .project-card.reveal { transition-delay: var(--stagger, 0s); }
+
+  @media (pointer: coarse) {
+    .project-card, .skill-pill { cursor: auto; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-title, .hero-desc, .hero-cta, .hero-image-shape, .hero-initials, .hero-scroll, .skills-track {
+      animation: none !important;
+      transition: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-left { padding: 7rem 1.75rem 3rem; }
+    .hero-right { min-height: 45vh; }
+    .hero-initials { font-size: 6rem; }
+    .hero-desc { max-width: 100%; }
+    .work-section, .skills-section, .about-section, .contact-section { padding: 5rem 1.75rem; }
+    .project-grid { grid-template-columns: 1fr; }
+    .project-card:nth-child(1) { grid-column: span 1; aspect-ratio: 4/3; }
+    .about-section { grid-template-columns: 1fr; gap: 3rem; }
+    .about-image-col { order: -1; }
+    .about-frame-tag { right: 0; }
+    .form-row { grid-template-columns: 1fr; }
+    .contact-bg-text { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<nav id="main-nav">
+  <a href="#" class="nav-logo">Joel Li.</a>
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero" id="home">
+  <div class="hero-left">
+    <h1 class="hero-title">
+      Crafting<br>
+      <em>digital</em><br>
+      experiences
+    </h1>
+    <p class="hero-desc">
+      Designer &amp; Creative Director — I build interfaces that feel as good as they look, blending intuition with craft to create products people actually love.
+    </p>
+    <div class="hero-cta">
+      <button class="btn-primary" onclick="document.getElementById('work').scrollIntoView({behavior:'smooth'})">View Work</button>
+      <button class="btn-ghost" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get in touch →</button>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-image-bg"></div>
+    <div class="hero-image-shape"></div>
+    <div class="hero-initials">JL</div>
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      <span class="scroll-label">Scroll</span>
+    </div>
+  </div>
+</section>
+
+<section class="work-section" id="work">
+  <div class="section-header reveal">
+    <h2 class="section-title">Selected Work</h2>
+  </div>
+  <div class="project-grid">
+    <a class="project-card reveal" href="aurum-studio.html">
+      <div class="project-bg p1-bg">
+        <svg class="project-pattern" viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice"><defs><pattern id="g1" width="40" height="40" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="1" fill="white"/></pattern></defs><rect width="400" height="250" fill="url(#g1)"/></svg>
+      </div>
+      <div class="project-overlay"></div>
+      <div class="project-arrow">↗</div>
+      <div class="project-content">
+        <p class="project-category">Brand Identity</p>
+        <h3 class="project-name">Aurum Studio</h3>
+        <p class="project-hover-info">Visual identity system for a luxury creative studio based in Milan.</p>
+      </div>
+    </a>
+    <a class="project-card reveal" href="wavelength-app.html">
+      <div class="project-bg p2-bg">
+        <svg class="project-pattern" viewBox="0 0 300 250" preserveAspectRatio="xMidYMid slice"><defs><pattern id="g2" width="30" height="30" patternUnits="userSpaceOnUse"><line x1="0" y1="15" x2="30" y2="15" stroke="white" stroke-width="0.5"/><line x1="15" y1="0" x2="15" y2="30" stroke="white" stroke-width="0.5"/></pattern></defs><rect width="300" height="250" fill="url(#g2)"/></svg>
+      </div>
+      <div class="project-overlay"></div>
+      <div class="project-arrow">↗</div>
+      <div class="project-content">
+        <p class="project-category">UI/UX Design</p>
+        <h3 class="project-name">Wavelength App</h3>
+        <p class="project-hover-info">Music discovery platform — from wireframes to full design system.</p>
+      </div>
+    </a>
+    <a class="project-card reveal" href="ember-collective.html">
+      <div class="project-bg p3-bg">
+        <svg class="project-pattern" viewBox="0 0 300 250" preserveAspectRatio="xMidYMid slice"><defs><pattern id="g3" width="50" height="50" patternUnits="userSpaceOnUse"><polygon points="25,2 48,14 48,36 25,48 2,36 2,14" fill="none" stroke="white" stroke-width="0.5"/></pattern></defs><rect width="300" height="250" fill="url(#g3)"/></svg>
+      </div>
+      <div class="project-overlay"></div>
+      <div class="project-arrow">↗</div>
+      <div class="project-content">
+        <p class="project-category">Web Design</p>
+        <h3 class="project-name">Ember Collective</h3>
+        <p class="project-hover-info">Editorial-style website for an independent art collective.</p>
+      </div>
+    </a>
+    <a class="project-card reveal" href="verdant-health.html">
+      <div class="project-bg p4-bg">
+        <svg class="project-pattern" viewBox="0 0 300 250" preserveAspectRatio="xMidYMid slice"><defs><pattern id="g4" width="25" height="25" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="12" height="12" fill="none" stroke="white" stroke-width="0.5"/></pattern></defs><rect width="300" height="250" fill="url(#g4)"/></svg>
+      </div>
+      <div class="project-overlay"></div>
+      <div class="project-arrow">↗</div>
+      <div class="project-content">
+        <p class="project-category">Product Design</p>
+        <h3 class="project-name">Verdant Health</h3>
+        <p class="project-hover-info">Health tracking dashboard — 0 to 1 product design process.</p>
+      </div>
+    </a>
+  </div>
+</section>
+
+<section class="skills-section">
+  <div class="section-header reveal">
+    <h2 class="section-title">What I Do</h2>
+  </div>
+  <div class="skills-marquee-wrapper reveal">
+    <div class="skills-track" id="track1">
+      <span class="skill-pill accent">UI Design</span>
+      <span class="skill-pill">Brand Identity</span>
+      <span class="skill-pill accent">Interaction Design</span>
+      <span class="skill-pill">Typography</span>
+      <span class="skill-pill accent">Motion Design</span>
+      <span class="skill-pill">Design Systems</span>
+      <span class="skill-pill accent">Art Direction</span>
+      <span class="skill-pill">Prototyping</span>
+      <span class="skill-pill accent">UI Design</span>
+      <span class="skill-pill">Brand Identity</span>
+      <span class="skill-pill accent">Interaction Design</span>
+      <span class="skill-pill">Typography</span>
+      <span class="skill-pill accent">Motion Design</span>
+      <span class="skill-pill">Design Systems</span>
+      <span class="skill-pill accent">Art Direction</span>
+      <span class="skill-pill">Prototyping</span>
+    </div>
+    <div class="skills-track" id="track2">
+      <span class="skill-pill">Figma</span>
+      <span class="skill-pill accent">Framer</span>
+      <span class="skill-pill">After Effects</span>
+      <span class="skill-pill accent">Webflow</span>
+      <span class="skill-pill">Illustrator</span>
+      <span class="skill-pill accent">Principle</span>
+      <span class="skill-pill">Spline 3D</span>
+      <span class="skill-pill accent">Lottie</span>
+      <span class="skill-pill">Figma</span>
+      <span class="skill-pill accent">Framer</span>
+      <span class="skill-pill">After Effects</span>
+      <span class="skill-pill accent">Webflow</span>
+      <span class="skill-pill">Illustrator</span>
+      <span class="skill-pill accent">Principle</span>
+      <span class="skill-pill">Spline 3D</span>
+      <span class="skill-pill accent">Lottie</span>
+    </div>
+  </div>
+</section>
+
+<section class="about-section" id="about">
+  <div class="about-left reveal">
+    <h2 class="about-title">Design is a conversation between form and function</h2>
+    <p class="about-desc">
+      Based in Singapore, I'm a designer with 6+ years of experience crafting digital products and visual identities. I believe great design is invisible — it guides users effortlessly while leaving them with a feeling.
+      <br><br>
+      I've worked with startups, agencies, and global brands to build things that matter and look extraordinary doing it.
+    </p>
+    <div class="about-stats">
+      <div class="stat-box">
+        <div class="stat-num" data-target="6">0</div>
+        <div class="stat-label">Years Experience</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" data-target="40">0</div>
+        <div class="stat-label">Projects Shipped</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" data-target="18">0</div>
+        <div class="stat-label">Happy Clients</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" data-target="5">0</div>
+        <div class="stat-label">Awards Won</div>
+      </div>
+    </div>
+  </div>
+  <div class="about-image-col reveal">
+    <div class="about-image-frame">
+      <div class="about-image-label">Joel</div>
+    </div>
+    <div class="about-frame-tag">Available for projects</div>
+  </div>
+</section>
+
+<section class="contact-section" id="contact">
+  <div class="contact-bg-text">Let's talk.</div>
+  <div class="contact-inner reveal">
+    <h2 class="contact-title">Got a project <em>in mind?</em></h2>
+    <p class="contact-sub">I'm currently available for freelance projects and full-time opportunities. Let's build something remarkable together.</p>
+    <form class="contact-form" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Name</label>
+          <input type="text" class="form-input" placeholder="Your name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-input" placeholder="your@email.com">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Project type</label>
+        <input type="text" class="form-input" placeholder="Brand identity, UI design, Web...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Message</label>
+        <textarea class="form-input form-textarea" placeholder="Tell me about your project..."></textarea>
+      </div>
+      <button type="submit" class="form-submit">Send Message</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-copy">© 2025 Joel. All rights reserved.</span>
+  <div class="footer-links">
+    <a href="#">Dribbble</a>
+    <a href="#">Behance</a>
+    <a href="#">LinkedIn</a>
+    <a href="#">Instagram</a>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>
