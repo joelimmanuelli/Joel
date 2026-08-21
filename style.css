@@ -55,9 +55,15 @@ nav {
   backdrop-filter: blur(20px);
   background: rgba(10,10,10,0.6);
   border-bottom: 1px solid transparent;
-  transition: border-color 0.3s;
+  transition: border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              padding 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
-nav.scrolled { border-color: var(--border); }
+nav.scrolled {
+  border-color: var(--border);
+  padding: 1rem 3rem;
+  background: rgba(8,8,8,0.85);
+}
 .nav-logo {
   font-family: 'Playfair Display', serif;
   font-size: 1.4rem;
@@ -214,8 +220,17 @@ footer {
   50% { opacity: 1; transform: scaleY(1); }
 }
 
-.reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal {
+  opacity: 0;
+  transform: translateY(48px) scale(0.96);
+  filter: blur(8px);
+  transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 1s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 1s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--stagger, 0s);
+  will-change: transform, opacity, filter;
+}
+.reveal.visible { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
 
 a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
   outline: 2px solid var(--accent);
@@ -236,7 +251,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     transition: none !important;
     opacity: 1 !important;
     transform: none !important;
+    filter: none !important;
   }
+  .hero-parallax { transform: none !important; }
 }
 
 @media (max-width: 860px) {
