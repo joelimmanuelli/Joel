@@ -221,7 +221,7 @@ input::placeholder,textarea::placeholder{color:#8F8D7C}
 
         
 
-        <p style="margin:0;max-width:62ch;font-size:clamp(14px,1.1vw,16px);line-height:1.75;color:#5C5A4B;text-wrap:pretty">Hi, I'm a hands-on creator driven by curiosity, always experimenting across tools and mediums to turn ideas into tangible experiences. I strive to craft designs that are both inventive and meaningful, leaving a lasting impression through thoughtful problem-solving and practical innovation.</p><span data-mag=".3" onClick="{{ goAbout }}" style="display:inline-flex;align-items:center;gap:8px;margin-top:22px;font-weight:700;font-size:13px;color:var(--acc2,#8A5F1C);cursor:pointer" style-hover="color:#16180F">More about me <span style="display:inline-block;transform:rotate(-45deg)">→</span></span><div style="display:flex;flex-direction:column;align-items:flex-end;gap:clamp(14px,1.9vh,20px);margin-top:clamp(12px,1.8vh,20px);animation:pullup 1s .3s cubic-bezier(.16,1,.3,1) both">
+        <p style="margin:0;max-width:62ch;font-size:clamp(14px,1.1vw,16px);line-height:1.75;color:#5C5A4B;text-wrap:pretty">I'm an industrial designer based in Singapore, currently reading Industrial Design at NUS with a background in mechanical engineering. I design physical products where mechanism, material and form work together, and I work things out through hands-on prototyping. Open to summer internships from late April 2027.</p><span data-mag=".3" onClick="{{ goAbout }}" style="display:inline-flex;align-items:center;gap:8px;margin-top:22px;font-weight:700;font-size:13px;color:var(--acc2,#8A5F1C);cursor:pointer" style-hover="color:#16180F">More about me <span style="display:inline-block;transform:rotate(-45deg)">→</span></span><div style="display:flex;flex-direction:column;align-items:flex-end;gap:clamp(14px,1.9vh,20px);margin-top:clamp(12px,1.8vh,20px);animation:pullup 1s .3s cubic-bezier(.16,1,.3,1) both">
           
           
         </div>
@@ -362,37 +362,32 @@ input::placeholder,textarea::placeholder{color:#8F8D7C}
 
   
 
-  <div style="padding:20px 20px 0;max-width:720px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;align-items:start">
-    <div style="display:flex;flex-direction:column;gap:20px">
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px">
-        <sc-for list="{{ current.gallery }}" as="g" hint-placeholder-count="4">
-          <div onClick="{{ g.open }}" style="position:relative;aspect-ratio:4/3;border-radius:3px;overflow:hidden;background:#E7E4DB;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:8%">
-            <img data-hsrc="{{ g.src }}" alt="" style="width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.22,1,.36,1)" style-hover="transform:scale(1.04)"></div>
-        </sc-for>
-      </div>
-      <div style="background:#E7E4DB;border-radius:3px;padding:30px">
-        <div style="font-family: 'Almarai',system-ui,sans-serif; font-size: 12px; letter-spacing: .08em; color: var(--acc2,#8A5F1C)">Journey</div>
-        <div style="margin:12px 0 0;display:flex;flex-direction:column;gap:14px">
-          <sc-for list="{{ approachParas }}" as="para" hint-placeholder-count="2">
-            <p style="margin:0;font-size:15px;line-height:1.75;color:#5C5A4B">{{ para.t }}</p>
-          </sc-for>
-        </div>
-      </div>
-      
-    </div>
-    <div style="background:#E7E4DB;border-radius:3px;padding:24px;display:flex;flex-direction:column;gap:18px;font-size:13px">
-      <div></div>
+  <div style="padding:14px 20px 0;max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:14px">
+    <div style="background:#E7E4DB;border-radius:3px;padding:16px 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px 24px;align-items:start;font-size:13px">
       <div><div style="font-family:'Almarai',system-ui,sans-serif;font-size:10.5px;letter-spacing:.08em;color:#8F8D7C">YEAR</div><div style="margin-top:5px;color:#16180F">{{ current.year }}</div></div>
       <div><div style="font-family:'Almarai',system-ui,sans-serif;font-size:10.5px;letter-spacing:.08em;color:#8F8D7C">TOOLS</div><div style="margin-top:5px;color:#16180F">{{ current.toolsLabel }}</div></div>
       <sc-if value="{{ current.hasTeam }}" hint-placeholder-val="{{ false }}">
       <div><div style="font-family:'Almarai',system-ui,sans-serif;font-size:10.5px;letter-spacing:.08em;color:#8F8D7C">TEAM</div>
-        <div style="margin-top:5px;display:flex;flex-direction:column;gap:3px;color:#16180F">
+        <div style="margin-top:5px;display:flex;flex-direction:column;gap:2px;color:#16180F">
           <sc-for list="{{ current.team }}" as="tm" hint-placeholder-count="3"><span>{{ tm.n }}</span></sc-for>
         </div>
       </div>
       </sc-if>
-      <div style="height:1px;background:rgba(22,24,15,.14)"></div>
-      <div data-mag=".3" onClick="{{ goContact }}" style="display:flex;align-items:center;gap:8px;font-weight:700;color:var(--acc2,#8A5F1C);cursor:pointer" style-hover="color:#16180F">Ask me about it <span style="display:inline-block;transform:rotate(-45deg)">→</span></div>
+      <div style="align-self:end"><div data-mag=".3" onClick="{{ goContact }}" style="display:inline-flex;align-items:center;gap:8px;font-weight:700;color:var(--acc2,#8A5F1C);cursor:pointer" style-hover="color:#16180F">Ask me about it <span style="display:inline-block;transform:rotate(-45deg)">→</span></div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(190px,38vw),1fr));gap:10px">
+      <sc-for list="{{ current.gallery }}" as="g" hint-placeholder-count="4">
+        <div onClick="{{ g.open }}" style="position:relative;aspect-ratio:4/3;border-radius:3px;overflow:hidden;background:#E7E4DB;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:7%">
+          <img data-hsrc="{{ g.src }}" alt="" style="width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.22,1,.36,1)" style-hover="transform:scale(1.04)"></div>
+      </sc-for>
+    </div>
+    <div style="background:#E7E4DB;border-radius:3px;padding:26px 28px">
+      <div style="font-family: 'Almarai',system-ui,sans-serif; font-size: 12px; letter-spacing: .08em; color: var(--acc2,#8A5F1C)">Journey</div>
+      <div style="margin:12px 0 0;display:flex;flex-direction:column;gap:14px">
+        <sc-for list="{{ approachParas }}" as="para" hint-placeholder-count="2">
+          <p style="margin:0;font-size:15px;line-height:1.75;color:#5C5A4B">{{ para.t }}</p>
+        </sc-for>
+      </div>
     </div>
   </div>
   <sc-if value="{{ current.hasStory }}" hint-placeholder-val="{{ false }}">
