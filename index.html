@@ -1315,7 +1315,12 @@ class Component extends DCLogic {
           if (!res.ok || data.success === false || data.success === "false") throw new Error(data.message || "failed");
           this.setState({ sending: false, sent: true });
         } catch (err) {
-          this.setState({ sending: false, sendNote: "That didn't send. Please email me at joel.li.2003@gmail.com instead." });
+          const why = String((err && err.message) || "");
+          const note = /activat/i.test(why)
+            ? "This form isn't switched on yet. Please email me at joel.li.2003@gmail.com for now."
+            : "That didn't send" + (why && why !== "failed" && why !== "Failed to fetch" ? " (" + why + ")" : "") + ". Please email me at joel.li.2003@gmail.com instead.";
+          console.warn("[contact form]", why);
+          this.setState({ sending: false, sendNote: note });
         }
       }
     };
