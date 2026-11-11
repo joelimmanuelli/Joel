@@ -18,6 +18,11 @@ html,body{margin:0;background:#F2F0EA;font-family:'Almarai',system-ui,sans-serif
 a{color:var(--acc2,#8A5F1C);text-decoration:none}a:hover{color:#16180F}
 ::selection{background:var(--acc,#C8964A);color:#16180F}
 input::placeholder,textarea::placeholder{color:#8F8D7C}
+.arch-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin-top:clamp(12px,1.6vw,20px)}
+.arch-sec{padding:clamp(30px,3.6vw,48px) 0}
+.arch-l{padding-right:clamp(24px,3.4vw,52px)}
+.arch-r{padding-left:clamp(24px,3.4vw,52px);border-left:1px solid rgba(22,24,15,.16)}
+@media (max-width:900px){.arch-grid{grid-template-columns:minmax(0,1fr)}.arch-l,.arch-r{padding-left:0;padding-right:0;border-left:0}.arch-r{border-top:0}}
 @keyframes pullup{0%{opacity:0;transform:translateY(22px)}100%{opacity:1;transform:translateY(0)}}
 @keyframes cardin{0%{opacity:0;transform:scale(.96)}100%{opacity:1;transform:scale(1)}}
 @keyframes fade{0%{opacity:0}100%{opacity:1}}
@@ -293,10 +298,11 @@ input::placeholder,textarea::placeholder{color:#8F8D7C}
     <h1 style="margin:0;font-family:'Almarai',system-ui,sans-serif;font-size:clamp(22px,2.6vw,30px);font-weight:400;letter-spacing:.02em;color:#16180F">ARCHIVE</h1>
     <span style="font-family:'Almarai',system-ui,sans-serif;font-size:12px;letter-spacing:.06em;color:#6E6C5C">{{ total }} PROJECTS</span>
   </div>
+  <div class="arch-grid">
   <sc-for list="{{ sections }}" as="sec" hint-placeholder-count="4">
-    <section style="margin-top:clamp(40px,5vw,68px)">
+    <section class="{{ sec.cls }}">
       <h2 style="margin:0;display:inline-flex;align-items:baseline;gap:8px;padding-bottom:8px;border-bottom:1.5px solid #16180F;font-family:'Almarai',system-ui,sans-serif;font-size:clamp(15px,1.5vw,18px);font-weight:400;letter-spacing:.03em;color:#16180F">{{ sec.label }}<span style="font-size:11px;letter-spacing:.06em;color:#6E6C5C">{{ sec.n }}</span></h2>
-      <div style="margin-top:clamp(22px,2.6vw,34px);display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:clamp(30px,4vw,56px) clamp(18px,2.6vw,36px)">
+      <div style="margin-top:clamp(22px,2.6vw,34px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(26px,3vw,40px) clamp(14px,1.8vw,26px)">
         <sc-for list="{{ sec.items }}" as="p" hint-placeholder-count="3">
           <div style="animation:cardin .7s cubic-bezier(.22,1,.36,1) both">
             <div onClick="{{ p.open }}" style="cursor:pointer">
@@ -316,6 +322,7 @@ input::placeholder,textarea::placeholder{color:#8F8D7C}
       </div>
     </section>
   </sc-for>
+  </div>
 </div>
 </sc-if>
 
@@ -1221,7 +1228,7 @@ class Component extends DCLogic {
       sections: ["Product", "Spatial design", "Form exploration", "Interaction"].map((c) => {
         const items = list.map((it, n) => ({ ...it, open: () => this.go("project", { idx: n, from: this.state.page === "project" ? this.state.from : this.state.page }) })).filter((it) => it.cat === c);
         return { label: c, n: String(items.length).padStart(2, "0"), items };
-      }).filter((sec) => sec.items.length),
+      }).filter((sec) => sec.items.length).map((sec, k) => ({ ...sec, cls: "arch-sec " + (k % 2 ? "arch-r" : "arch-l") })),
       featured: { ...list[0], open: () => this.go("project", { idx: 0 }) },
       rest: list.slice(1).map((it, n) => ({ ...it, open: () => this.go("project", { idx: n + 1 }) })),
       toolGroups: [
