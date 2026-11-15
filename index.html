@@ -412,7 +412,6 @@ html .gal-item:hover img[data-rvi],html .zoomable:hover img[data-rvi]{transform:
 <div>
   <section class="wrap hero">
     <div class="hero-top lab" data-rv="fade">
-      <i class="rule" data-rv="line"></i>
       <span class="hero-loc"><i class="dot"></i>Singapore · {{ clock }}</span>
     </div>
     <div data-heroline="1" class="hero-grid">
@@ -456,12 +455,6 @@ html .gal-item:hover img[data-rvi],html .zoomable:hover img[data-rvi]{transform:
       </sc-for>
     </div>
   </section>
-
-  <div class="marq">
-    <div data-marq="1" class="marq-in serif">
-      <span>Interfaces</span><em>objects</em><span>Renders</span><em>prototypes</em><span>Interfaces</span><em>objects</em><span>Renders</span><em>prototypes</em>
-    </div>
-  </div>
 
   <section class="wrap tools">
     <div class="tools-grid">
@@ -1935,7 +1928,7 @@ class Component extends DCLogic {
       }
     };
     const _order = ["BUBU", "VÄXA", "Cool Spot", "One Day Somewhere New", "Notch", "coffee machine"];
-    _v.homeProjects = _order.map((t) => _v.projects.find((p) => p.title === t)).filter(Boolean).map((p, k) => ({ ...p, num: String(k + 1).padStart(2, "0") }));
+    _v.homeProjects = [..._order.map((t) => _v.projects.find((p) => p.title === t)).filter(Boolean), ..._v.projects.filter((p) => !_order.includes(p.title))].map((p, k) => ({ ...p, num: String(k + 1).padStart(2, "0") }));
     return _v;
   }
 }
