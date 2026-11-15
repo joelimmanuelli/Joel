@@ -443,7 +443,7 @@ html .gal-item:hover img[data-rvi],html .zoomable:hover img[data-rvi]{transform:
       <span class="link" data-mag=".3" onClick="{{ goWork }}">Full archive ( {{ total }} ) <b>→</b></span>
     </div>
     <div class="work-grid">
-      <sc-for list="{{ projects }}" as="p" hint-placeholder-count="8">
+      <sc-for list="{{ homeProjects }}" as="p" hint-placeholder-count="8">
         <div class="work-item">
           <div class="work-click" data-cur="Open" onClick="{{ p.open }}">
             <div class="tile" data-rv="clip"><div class="tile-px" data-px="1"><img data-rvi="1" data-hsrc="{{ p.homeThumb }}" alt=""></div></div>
@@ -1772,7 +1772,7 @@ class Component extends DCLogic {
     const i = Math.min(this.state.idx, list.length - 1);
     const p = this.state.page;
     const nav = (k) => (p === k ? "#16180F" : "rgba(22,24,15,.72)");
-    return {
+    const _v = {
       introOpen: !!this.state.intro,
       stepInside: () => {
         try { sessionStorage.setItem("joel-intro-seen", "1"); } catch (e) {}
@@ -1935,6 +1935,9 @@ class Component extends DCLogic {
         }
       }
     };
+    const _order = ["BUBU", "VÄXA", "Cool Spot", "One Day Somewhere New", "Notch", "coffee machine"];
+    _v.homeProjects = _order.map((t) => _v.projects.find((p) => p.title === t)).filter(Boolean).map((p, k) => ({ ...p, num: String(k + 1).padStart(2, "0") }));
+    return _v;
   }
 }
 </script>
