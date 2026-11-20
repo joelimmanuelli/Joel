@@ -1363,6 +1363,9 @@ class Component extends DCLogic {
     this.scanTimer = setInterval(() => { try { this.motionScan(); } catch (e) {} }, 350);
     try { if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { try { this.splitAll(true); } catch (e) {} }); } catch (e) {}
     setTimeout(() => { if (this.hold && !this.tBusy && !this.introOv) { this.hold = false; } }, 7000);
+    let emb = false;
+    try { emb = /[?&]embed(=|&|$)/.test(location.search) || window.self !== window.top; } catch (e) { emb = true; }
+    if (emb) { setTimeout(() => { this.hold = false; this.motionScan(); }, 120); return; }
     this.introPlay();
   }
 
